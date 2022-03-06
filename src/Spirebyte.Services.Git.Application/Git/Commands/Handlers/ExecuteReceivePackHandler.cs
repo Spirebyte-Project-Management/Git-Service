@@ -1,11 +1,16 @@
-﻿using System.Threading;
+﻿using System.Linq;
+using System.Threading;
 using System.Threading.Tasks;
 using CliWrap;
 using Convey.CQRS.Commands;
 using LibGit2Sharp;
-using Spirebyte.Services.Git.Application.Git.Helpers;
+using Spirebyte.Services.Git.Application.Git.Services;
+using Spirebyte.Services.Git.Application.Git.Services.Interfaces;
 using Spirebyte.Services.Git.Application.Projects.Exceptions;
+using Spirebyte.Services.Git.Core.Entities;
+using Spirebyte.Services.Git.Core.Helpers;
 using Spirebyte.Services.Git.Core.Repositories;
+using Branch = Spirebyte.Services.Git.Core.Entities.Branch;
 
 namespace Spirebyte.Services.Git.Application.Git.Commands.Handlers;
 
@@ -13,11 +18,13 @@ public class ExecuteReceivePackHandler : ICommandHandler<ExecuteReceivePack>
 {
     private readonly IProjectRepository _projectRepository;
     private readonly IRepositoryRepository _repositoryRepository;
+    private readonly IRepositoryService _repositoryService;
 
-    public ExecuteReceivePackHandler(IProjectRepository projectRepository, IRepositoryRepository repositoryRepository)
+    public ExecuteReceivePackHandler(IProjectRepository projectRepository, IRepositoryRepository repositoryRepository, IRepositoryService repositoryService)
     {
         _projectRepository = projectRepository;
         _repositoryRepository = repositoryRepository;
+        _repositoryService = repositoryService;
     }
     
     public async Task HandleAsync(ExecuteReceivePack command, CancellationToken cancellationToken = default)
@@ -28,14 +35,22 @@ public class ExecuteReceivePackHandler : ICommandHandler<ExecuteReceivePack>
         var repository = await _repositoryRepository.GetAsync(command.RepositoryId);
         if (repository is null) throw new RepositoryNotFoundException(command.RepositoryId);
 
+        await _repositoryService.EnsureLatestRepositoryIsCached(repository);
+        
         await Cli.Wrap("git")
             .WithArguments(builder => builder
                 .Add("receive-pack")
                 .Add("--stateless-rpc")
-                .Add(RepoPathHelpers.GetCachePathForRepositoryId(command.RepositoryId)))
+                .Add(RepoPathHelpers.GetCachePathForRepository(repository)))
             .WithWorkingDirectory(RepoPathHelpers.RepoCacheDirPath)
             .WithStandardInputPipe(PipeSource.FromStream(command.InputStream))
             .WithStandardOutputPipe(PipeTarget.ToStream(command.OutputStream, true))
             .ExecuteAsync(cancellationToken);
+        
+        repository.UpdateRepositoryFromGit();
+        
+        repository = await _repositoryService.UploadRepoChanges(repository);
+
+        await _repositoryRepository.UpdateAsync(repository);
     }
 }

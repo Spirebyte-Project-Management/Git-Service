@@ -14,6 +14,7 @@
         <PackageReference Include="Convey.WebApi" Version="1.0.531" />
         <PackageReference Include="LibGit2Sharp" Version="0.26.2" />
         <PackageReference Include="Microsoft.Extensions.Logging" Version="6.0.0" />
+        <PackageReference Include="Partytitan.Convey.Minio" Version="1.0.10" />
         <PackageReference Include="Spirebyte.Shared" Version="1.0.3" />
     </ItemGroup>
 

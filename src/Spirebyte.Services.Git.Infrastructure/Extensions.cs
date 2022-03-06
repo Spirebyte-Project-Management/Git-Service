@@ -21,6 +21,7 @@ using Convey.WebApi.CQRS;
 using Convey.WebApi.Swagger;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.Extensions.DependencyInjection;
+using Partytitan.Convey.Minio;
 using Spirebyte.Services.Git.Application;
 using Spirebyte.Services.Git.Application.Clients.Interfaces;
 using Spirebyte.Services.Git.Application.Projects.Events.External;
@@ -67,6 +68,7 @@ public static class Extensions
             .AddMongoRepository<ProjectDocument, string>("projects")
             .AddMongoRepository<RepositoryDocument, string>("repositories")
             .AddWebApiSwaggerDocs()
+            .AddMinio()
             .AddSecurity();
     }
 

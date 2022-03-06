@@ -17,7 +17,7 @@ public class Commit
     
     public Commit(LibGit2Sharp.Commit commit)
     {
-        Id = commit.Id.ToString(6);
+        Id = commit.Id.ToString(7);
         Sha = commit.Sha;
         ShortMessage = commit.MessageShort;
         Message = commit.Message;
