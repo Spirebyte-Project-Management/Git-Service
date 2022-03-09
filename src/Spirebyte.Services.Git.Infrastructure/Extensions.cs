@@ -24,7 +24,6 @@ using Microsoft.Extensions.DependencyInjection;
 using Partytitan.Convey.Minio;
 using Spirebyte.Services.Git.Application;
 using Spirebyte.Services.Git.Application.Clients.Interfaces;
-using Spirebyte.Services.Git.Application.Projects.Events.External;
 using Spirebyte.Services.Git.Application.Services.Interfaces;
 using Spirebyte.Services.Git.Core.Repositories;
 using Spirebyte.Services.Git.Infrastructure.Clients.HTTP;
@@ -81,8 +80,7 @@ public static class Extensions
             .UseAccessTokenValidator()
             .UsePublicContracts<ContractAttribute>()
             .UseAuthentication()
-            .UseRabbitMq()
-            .SubscribeEvent<ProjectCreated>();
+            .UseRabbitMq();
 
         return app;
     }
