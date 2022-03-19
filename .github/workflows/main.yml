@@ -20,7 +20,6 @@ env:
 # A workflow run is made up of one or more jobs that can run sequentially or in parallel
 jobs:
   build-and-publish-docker-image:
-    needs: build
     name: Build and publish Docker image
     runs-on: ubuntu-latest
     permissions:
