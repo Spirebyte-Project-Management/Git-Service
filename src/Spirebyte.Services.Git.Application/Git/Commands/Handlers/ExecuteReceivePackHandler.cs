@@ -46,8 +46,8 @@ public class ExecuteReceivePackHandler : ICommandHandler<ExecuteReceivePack>
             .WithStandardInputPipe(PipeSource.FromStream(command.InputStream))
             .WithStandardOutputPipe(PipeTarget.ToStream(command.OutputStream, true))
             .ExecuteAsync(cancellationToken);
-        
-        repository.UpdateRepositoryFromGit();
+
+        await repository.UpdateRepositoryFromGit();
         
         repository = await _repositoryService.UploadRepoChanges(repository);
 

@@ -1,5 +1,8 @@
-﻿using System.IO;
+﻿using System;
+using System.IO;
+using System.Threading;
 using System.Threading.Tasks;
+using Convey.CQRS.Commands;
 using Partytitan.Convey.Minio.Services.Interfaces;
 using Spirebyte.Services.Git.Application.Git.Services.Interfaces;
 using Spirebyte.Services.Git.Core.Entities;
@@ -18,26 +21,23 @@ public class RepositoryService : IRepositoryService
 
     public async Task EnsureLatestRepositoryIsCached(Repository repository)
     {
+        if (RepoPathHelpers.RepoCacheIsCurrentReference(repository)) return;
+
         var repoPath = RepoPathHelpers.GetCachePathForRepository(repository);
-        
-        if (Directory.Exists(repoPath)) return;
 
         if (repoPath != null)
         {
-            var parentDir = Directory.GetParent(repoPath);
-            if (parentDir != null)
-            {
-                if (!parentDir.Exists)
-                {
-                    parentDir.Create();
-                }
-                
-                parentDir.Refresh();
+            var repoDir = new DirectoryInfo(repoPath);
 
-                foreach (var dir in parentDir.EnumerateDirectories())
-                {
-                    ForceDeleteDirectory(dir.FullName);
-                }
+            if (!repoDir.Exists)
+            {
+                repoDir.Create();
+                repoDir.Refresh();
+            }
+
+            foreach (var dir in repoDir.EnumerateDirectories())
+            {
+                ForceDeleteDirectory(dir.FullName);
             }
 
             await _minioService.DownloadDirAsync(repoPath, RepoPathHelpers.GetUploadPathForRepo(repository));
@@ -52,11 +52,16 @@ public class RepositoryService : IRepositoryService
         
         if (!Directory.Exists(repoPath)) return repository;
 
-        await _minioService.UploadDirAsync(repoPath, RepoPathHelpers.GetUploadPathForRepo(repository));
-
-        var newReferenceId = repository.ChangeReferenceId();
+        while (File.Exists(Path.Combine(repoPath, "index.lock")))
+        {
+            // do something, for example wait a second
+            Thread.Sleep(TimeSpan.FromMilliseconds(100));
+        }
         
-        Directory.Move(repoPath, RepoPathHelpers.GetCachePathForRepositoryId(repository.Id, newReferenceId));
+        var newReferenceId = repository.ChangeReferenceId();
+        RepoPathHelpers.UpdateRepoCacheReference(repository.Id, newReferenceId);
+
+        await _minioService.UploadDirAsync(repoPath, RepoPathHelpers.GetUploadPathForRepo(repository));
 
         return repository;
     }

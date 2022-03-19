@@ -62,7 +62,6 @@ public static class Extensions
             .AddRabbitMq(plugins: p => p.AddJaegerRabbitMqPlugin())
             .AddMessageOutbox(o => o.AddMongo())
             .AddMongo()
-            .AddRedis()
             .AddJaeger()
             .AddMongoRepository<ProjectDocument, string>("projects")
             .AddMongoRepository<RepositoryDocument, string>("repositories")
