@@ -43,7 +43,7 @@ jobs:
         SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
       run: |
         dotnet tool install --global dotnet-sonarscanner
-        dotnet sonarscanner begin /k:"Spirebyte-Project-Management_Repository-Service" /o:"spirebyte-project-management" /d:sonar.login="${{ secrets.SONAR_TOKEN }}" /d:sonar.host.url="https://sonarcloud.io"
+        dotnet sonarscanner begin /k:"Spirebyte-Project-Management_Git-Service" /o:"spirebyte-project-management" /d:sonar.login="${{ secrets.SONAR_TOKEN }}" /d:sonar.host.url="https://sonarcloud.io"
     - name: Install dependencies
       run: dotnet restore
       
