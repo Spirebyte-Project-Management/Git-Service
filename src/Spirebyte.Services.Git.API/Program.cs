@@ -8,6 +8,7 @@ using Microsoft.AspNetCore;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.DependencyInjection;
 using Spirebyte.Services.Git.Application;
 using Spirebyte.Services.Git.Infrastructure;
@@ -28,7 +29,7 @@ public class Program
         return WebHost.CreateDefaultBuilder(args)
             .ConfigureServices(services =>
             {
-                services.AddControllers();
+                services.AddControllers().AddMetrics();
                 services
                     .AddConvey()
                     .AddWebApi()
