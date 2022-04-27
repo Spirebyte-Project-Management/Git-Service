@@ -22,6 +22,7 @@ env:
 jobs:
   build-and-test:
     name: build-and-test-${{matrix.os}}
+    environment: Contabo vps
     runs-on: ${{ matrix.os }}
     strategy:
       matrix:
@@ -92,3 +93,8 @@ jobs:
           push: true
           tags: ${{ steps.meta.outputs.tags }}
           labels: ${{ steps.meta.outputs.labels }}
+
+      - name: Deploy to environment
+        uses: joelwmale/webhook-action@2.1.0
+        with:
+          url: ${{ secrets.WEBHOOK_URL }}
