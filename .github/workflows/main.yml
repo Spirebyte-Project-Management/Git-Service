@@ -22,7 +22,6 @@ env:
 jobs:
   build-and-test:
     name: build-and-test-${{matrix.os}}
-    environment: Contabo vps
     runs-on: ${{ matrix.os }}
     strategy:
       matrix:
@@ -63,6 +62,7 @@ jobs:
       
   publish-image:
     runs-on: ubuntu-latest
+    environment: Contabo vps
     needs: [build-and-test]
     if: needs.build-and-test.result == 'success'
     permissions:
