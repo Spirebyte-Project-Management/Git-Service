@@ -3,18 +3,14 @@ using Convey.Auth;
 using Convey.CQRS.Commands;
 using Convey.CQRS.Events;
 using Convey.CQRS.Queries;
-using Convey.Discovery.Consul;
 using Convey.Docs.Swagger;
 using Convey.HTTP;
 using Convey.LoadBalancing.Fabio;
-using Convey.MessageBrokers.CQRS;
 using Convey.MessageBrokers.Outbox;
 using Convey.MessageBrokers.Outbox.Mongo;
 using Convey.MessageBrokers.RabbitMQ;
 using Convey.Metrics.AppMetrics;
-using Convey.Metrics.Prometheus;
 using Convey.Persistence.MongoDB;
-using Convey.Persistence.Redis;
 using Convey.Security;
 using Convey.Tracing.Jaeger;
 using Convey.Tracing.Jaeger.RabbitMQ;
@@ -33,6 +29,7 @@ using Spirebyte.Services.Git.Infrastructure.Decorators;
 using Spirebyte.Services.Git.Infrastructure.Exceptions;
 using Spirebyte.Services.Git.Infrastructure.Mongo.Documents;
 using Spirebyte.Services.Git.Infrastructure.Mongo.Repositories;
+using Spirebyte.Services.Git.Infrastructure.ServiceDiscovery;
 using Spirebyte.Services.Git.Infrastructure.Services;
 using Spirebyte.Shared.Contexts;
 
@@ -58,7 +55,7 @@ public static class Extensions
             .AddInMemoryDispatcher()
             .AddJwt()
             .AddHttpClient()
-            .AddConsul()
+            .AddCustomConsul()
             .AddFabio()
             .AddExceptionToMessageMapper<ExceptionToMessageMapper>()
             .AddRabbitMq(plugins: p => p.AddJaegerRabbitMqPlugin())
