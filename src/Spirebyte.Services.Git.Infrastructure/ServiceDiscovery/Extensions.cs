@@ -23,10 +23,7 @@ public static class Extensions
         if (consulOptions.Address == "[hostname]")
         {
             var name = Dns.GetHostName(); // get container id
-            var ip = Dns.GetHostEntry(name).AddressList
-                .FirstOrDefault(x => x.AddressFamily == AddressFamily.InterNetwork);
-
-            consulOptions.Address = ip.ToString();
+            consulOptions.Address = name;
         }
         
         builder.AddConsul(consulOptions, httpClientOptions);
