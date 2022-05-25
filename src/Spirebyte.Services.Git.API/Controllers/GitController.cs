@@ -6,10 +6,12 @@ using Microsoft.AspNetCore.Mvc;
 using Spirebyte.Services.Git.API.Controllers.Base;
 using Spirebyte.Services.Git.API.Controllers.Results;
 using Spirebyte.Services.Git.Application.Git.Commands;
+using Spirebyte.Services.Git.Infrastructure.Authentication;
 
 namespace Spirebyte.Services.Git.API.Controllers;
 
 [Route("{projectId}/development/{repoId}.git/")]
+[GitAuthorize]
 public class GitController : BaseController
 {
     private const string FlushMessage = "0000";
@@ -21,6 +23,7 @@ public class GitController : BaseController
     [HttpGet("info/refs")]
     public IActionResult InfoRefs(string projectId, string repoId, string service)
     {
+        var test = Request;
         if (string.IsNullOrWhiteSpace(service))
         {
             return BadRequest("Only Git SMART Protocol is supported please provide service name");
