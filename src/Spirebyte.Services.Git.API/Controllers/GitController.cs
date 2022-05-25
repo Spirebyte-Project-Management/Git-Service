@@ -2,10 +2,12 @@
 using System.IO;
 using System.IO.Compression;
 using System.Linq;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Spirebyte.Services.Git.API.Controllers.Base;
 using Spirebyte.Services.Git.API.Controllers.Results;
 using Spirebyte.Services.Git.Application.Git.Commands;
+using Spirebyte.Services.Git.Core.Constants;
 using Spirebyte.Services.Git.Infrastructure.Authentication;
 
 namespace Spirebyte.Services.Git.API.Controllers;
@@ -21,9 +23,9 @@ public class GitController : BaseController
     private static readonly string[] PermittedServiceNames = { UploadPackString, ReceivePackString };
 
     [HttpGet("info/refs")]
+    [Authorize(ApiScopes.Read)]
     public IActionResult InfoRefs(string projectId, string repoId, string service)
     {
-        var test = Request;
         if (string.IsNullOrWhiteSpace(service))
         {
             return BadRequest("Only Git SMART Protocol is supported please provide service name");
@@ -43,6 +45,7 @@ public class GitController : BaseController
 
 
     [HttpPost("git-upload-pack")]
+    [Authorize(ApiScopes.Read)]
     public IActionResult UploadPack(string projectId, string repoId)
     {
         var command = new ExecuteUploadPack(projectId, repoId, GetInputStream());
@@ -51,6 +54,7 @@ public class GitController : BaseController
     }
     
     [HttpPost("git-receive-pack")]
+    [Authorize(ApiScopes.Commit)]
     public IActionResult ReceivePack(string projectId, string repoId)
     {
         var command = new ExecuteReceivePack(projectId, repoId, GetInputStream());

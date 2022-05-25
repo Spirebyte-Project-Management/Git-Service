@@ -6,6 +6,6 @@ public class GitAuthorizeAttribute : AuthorizeAttribute
 {
     public GitAuthorizeAttribute()
     {
-        Policy = "basic-introspection";
+        Policy = nameof(GitAuthorizeAttribute);
     }
 }
