@@ -22,8 +22,4 @@
         <ProjectReference Include="..\Spirebyte.Services.Git.Core\Spirebyte.Services.Git.Core.csproj" />
     </ItemGroup>
 
-    <ItemGroup>
-        <Folder Include="Exceptions" />
-    </ItemGroup>
-
 </Project>

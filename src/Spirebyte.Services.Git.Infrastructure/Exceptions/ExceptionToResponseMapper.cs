@@ -20,6 +20,8 @@ internal sealed class ExceptionToResponseMapper : IExceptionToResponseMapper
                 HttpStatusCode.BadRequest),
             AppException ex => new ExceptionResponse(new { code = GetCode(ex), reason = ex.Message },
                 HttpStatusCode.BadRequest),
+            AuthorizationException ex => new ExceptionResponse(new { code = GetCode(ex), reason = ex.Message },
+                HttpStatusCode.Forbidden),
             _ => new ExceptionResponse(new { code = "error", reason = "There was an error." },
                 HttpStatusCode.BadRequest)
         };
@@ -35,6 +37,7 @@ internal sealed class ExceptionToResponseMapper : IExceptionToResponseMapper
             DomainException domainException when !string.IsNullOrWhiteSpace(domainException.Code) => domainException
                 .Code,
             AppException appException when !string.IsNullOrWhiteSpace(appException.Code) => appException.Code,
+            AuthorizationException authorizationException when !string.IsNullOrWhiteSpace(authorizationException.Code) => authorizationException.Code,
             _ => exception.GetType().Name.Underscore().Replace("_exception", string.Empty)
         };
 

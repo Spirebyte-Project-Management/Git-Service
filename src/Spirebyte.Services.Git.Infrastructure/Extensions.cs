@@ -44,6 +44,8 @@ public static class Extensions
         builder.Services.AddSingleton<IRepositoryRepository, RepositoryRepository>();
         builder.Services.AddSingleton<IProjectRepository, ProjectRepository>();
         builder.Services.AddTransient<IIdentityApiHttpClient, IdentityApiHttpClient>();
+        builder.Services.AddTransient<IProjectsApiHttpClient, ProjectsApiHttpClient>();
+
         builder.Services.TryDecorate(typeof(ICommandHandler<>), typeof(OutboxCommandHandlerDecorator<>));
         builder.Services.TryDecorate(typeof(IEventHandler<>), typeof(OutboxEventHandlerDecorator<>));
 
