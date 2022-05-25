@@ -1,5 +1,4 @@
 ﻿using Convey;
-using Convey.Auth;
 using Convey.CQRS.Commands;
 using Convey.CQRS.Events;
 using Convey.CQRS.Queries;

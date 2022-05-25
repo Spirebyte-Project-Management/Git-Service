@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 using FluentAssertions;
 using Spirebyte.Services.Git.Core.Entities;
 using Spirebyte.Services.Git.Core.Exceptions;
@@ -10,13 +9,14 @@ namespace Spirebyte.Services.Git.Tests.Unit.Core.Entities;
 
 public class RepositoryTests
 {
-   [Fact]
+    [Fact]
     public void given_valid_input_repository_should_be_created()
     {
         var fakedRepository = RepositoryFaker.Instance.Generate();
 
         var repository = new Repository(fakedRepository.Id, fakedRepository.Title, fakedRepository.Description,
-            fakedRepository.ProjectId, fakedRepository.ReferenceId, fakedRepository.Branches, fakedRepository.CreatedAt);
+            fakedRepository.ProjectId, fakedRepository.ReferenceId, fakedRepository.Branches,
+            fakedRepository.CreatedAt);
 
         repository.Should().NotBeNull();
         repository.Id.Should().Be(fakedRepository.Id);
@@ -35,7 +35,8 @@ public class RepositoryTests
         var fakedRepository = RepositoryFaker.Instance.Generate();
 
         Action act = () => new Repository(string.Empty, fakedRepository.Title, fakedRepository.Description,
-            fakedRepository.ProjectId, fakedRepository.ReferenceId, fakedRepository.Branches, fakedRepository.CreatedAt);
+            fakedRepository.ProjectId, fakedRepository.ReferenceId, fakedRepository.Branches,
+            fakedRepository.CreatedAt);
         act.Should().Throw<InvalidIdException>();
     }
 
@@ -43,7 +44,7 @@ public class RepositoryTests
     public void given_empty_projectId_repository_should_throw_an_exception()
     {
         var fakedRepository = RepositoryFaker.Instance.Generate();
-        
+
         Action act = () => new Repository(fakedRepository.Id, fakedRepository.Title, fakedRepository.Description,
             string.Empty, fakedRepository.ReferenceId, fakedRepository.Branches, fakedRepository.CreatedAt);
         act.Should().Throw<InvalidProjectIdException>();
@@ -53,9 +54,10 @@ public class RepositoryTests
     public void given_empty_title_repository_should_throw_an_exception()
     {
         var fakedRepository = RepositoryFaker.Instance.Generate();
-        
+
         Action act = () => new Repository(fakedRepository.Id, string.Empty, fakedRepository.Description,
-            fakedRepository.ProjectId, fakedRepository.ReferenceId, fakedRepository.Branches, fakedRepository.CreatedAt);
+            fakedRepository.ProjectId, fakedRepository.ReferenceId, fakedRepository.Branches,
+            fakedRepository.CreatedAt);
         act.Should().Throw<InvalidTitleException>();
     }
 }

@@ -27,6 +27,16 @@ public class Repository
         CreatedAt = createdAt;
     }
 
+    public string Id { get; set; }
+    public string Title { get; set; }
+    public string Description { get; set; }
+    public string ProjectId { get; set; }
+
+    public Guid ReferenceId { get; set; }
+
+    public List<Branch> Branches { get; set; }
+    public DateTime CreatedAt { get; set; }
+
     public Task UpdateRepositoryFromGit()
     {
         var repoPath = RepoPathHelpers.GetCachePathForRepositoryId(Id);
@@ -41,14 +51,4 @@ public class Repository
 
         return ReferenceId;
     }
- 
-    public string Id { get; set; }
-    public string Title { get; set; }
-    public string Description { get; set; }
-    public string ProjectId { get; set; }
-    
-    public Guid ReferenceId { get; set; }
-    
-    public List<Branch> Branches { get; set; }
-    public DateTime CreatedAt { get; set; }
 }

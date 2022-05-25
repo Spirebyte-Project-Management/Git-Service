@@ -12,7 +12,8 @@ public class KeyAlreadyExistsException : AppException
     {
         GitId = gitId;
     }
-    protected KeyAlreadyExistsException(SerializationInfo info, StreamingContext context) 
+
+    protected KeyAlreadyExistsException(SerializationInfo info, StreamingContext context)
         : base(info, context)
     {
     }

@@ -9,10 +9,11 @@ public abstract class DomainException : Exception
     protected DomainException(string message) : base(message)
     {
     }
-    
-    protected DomainException(SerializationInfo info, StreamingContext context) 
+
+    protected DomainException(SerializationInfo info, StreamingContext context)
         : base(info, context)
     {
     }
+
     public virtual string Code { get; }
 }

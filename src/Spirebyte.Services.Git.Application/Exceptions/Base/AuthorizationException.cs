@@ -10,10 +10,10 @@ public abstract class AuthorizationException : Exception
     {
     }
 
-    protected AuthorizationException(SerializationInfo info, StreamingContext context) 
+    protected AuthorizationException(SerializationInfo info, StreamingContext context)
         : base(info, context)
     {
     }
-    
+
     public virtual string Code { get; }
 }

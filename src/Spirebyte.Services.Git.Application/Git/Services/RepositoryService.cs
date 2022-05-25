@@ -2,7 +2,6 @@
 using System.IO;
 using System.Threading;
 using System.Threading.Tasks;
-using Convey.CQRS.Commands;
 using Partytitan.Convey.Minio.Services.Interfaces;
 using Spirebyte.Services.Git.Application.Git.Services.Interfaces;
 using Spirebyte.Services.Git.Core.Entities;
@@ -35,10 +34,7 @@ public class RepositoryService : IRepositoryService
                 repoDir.Refresh();
             }
 
-            foreach (var dir in repoDir.EnumerateDirectories())
-            {
-                ForceDeleteDirectory(dir.FullName);
-            }
+            foreach (var dir in repoDir.EnumerateDirectories()) ForceDeleteDirectory(dir.FullName);
 
             await _minioService.DownloadDirAsync(repoPath, RepoPathHelpers.GetUploadPathForRepo(repository));
 
@@ -49,15 +45,13 @@ public class RepositoryService : IRepositoryService
     public async Task<Repository> UploadRepoChanges(Repository repository)
     {
         var repoPath = RepoPathHelpers.GetCachePathForRepository(repository);
-        
+
         if (!Directory.Exists(repoPath)) return repository;
 
         while (File.Exists(Path.Combine(repoPath, "index.lock")))
-        {
             // do something, for example wait a second
             Thread.Sleep(TimeSpan.FromMilliseconds(100));
-        }
-        
+
         var newReferenceId = repository.ChangeReferenceId();
         RepoPathHelpers.UpdateRepoCacheReference(repository.Id, newReferenceId);
 
@@ -66,49 +60,29 @@ public class RepositoryService : IRepositoryService
         return repository;
     }
 
-    private static void ForceDeleteDirectory(string path) 
+    private static void ForceDeleteDirectory(string path)
     {
         var directory = new DirectoryInfo(path) { Attributes = FileAttributes.Normal };
 
         foreach (var info in directory.GetFileSystemInfos("*", SearchOption.AllDirectories))
-        {
             info.Attributes = FileAttributes.Normal;
-        }
 
         directory.Delete(true);
     }
-    
+
     private void EnsureRequiredGitDirectoriesExist(string repoPath)
     {
         var refsPath = Path.Combine(repoPath, "refs");
         var refsHeadPath = Path.Combine(refsPath, "heads");
         var refsTagsPath = Path.Combine(refsPath, "tags");
-        if (!Directory.Exists(refsPath))
-        {
-            Directory.CreateDirectory(refsPath);
-        }
-        if (!Directory.Exists(refsHeadPath))
-        {
-            Directory.CreateDirectory(refsHeadPath);
-        }
-        if (!Directory.Exists(refsTagsPath))
-        {
-            Directory.CreateDirectory(refsTagsPath);
-        }
+        if (!Directory.Exists(refsPath)) Directory.CreateDirectory(refsPath);
+        if (!Directory.Exists(refsHeadPath)) Directory.CreateDirectory(refsHeadPath);
+        if (!Directory.Exists(refsTagsPath)) Directory.CreateDirectory(refsTagsPath);
         var objectsPath = Path.Combine(repoPath, "objects");
         var objectsInfoPath = Path.Combine(objectsPath, "info");
         var objectsPackPath = Path.Combine(objectsPath, "pack");
-        if (!Directory.Exists(objectsPath))
-        {
-            Directory.CreateDirectory(objectsPath);
-        }
-        if (!Directory.Exists(objectsInfoPath))
-        {
-            Directory.CreateDirectory(objectsInfoPath);
-        }
-        if (!Directory.Exists(objectsPackPath))
-        {
-            Directory.CreateDirectory(objectsPackPath);
-        }
+        if (!Directory.Exists(objectsPath)) Directory.CreateDirectory(objectsPath);
+        if (!Directory.Exists(objectsInfoPath)) Directory.CreateDirectory(objectsInfoPath);
+        if (!Directory.Exists(objectsPackPath)) Directory.CreateDirectory(objectsPackPath);
     }
 }

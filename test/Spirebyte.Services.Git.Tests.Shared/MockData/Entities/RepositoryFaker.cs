@@ -6,8 +6,6 @@ namespace Spirebyte.Services.Git.Tests.Shared.MockData.Entities;
 
 public sealed class RepositoryFaker : Faker<Repository>
 {
-    public static RepositoryFaker Instance => new();
-
     private RepositoryFaker()
     {
         CustomInstantiator(_ => FormatterServices.GetUninitializedObject(typeof(Repository)) as Repository);
@@ -19,4 +17,6 @@ public sealed class RepositoryFaker : Faker<Repository>
         RuleFor(r => r.Branches, f => BranchFaker.Instance.Generate(f.Random.Number(1, 20)));
         RuleFor(r => r.CreatedAt, f => f.Date.Past());
     }
+
+    public static RepositoryFaker Instance => new();
 }

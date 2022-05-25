@@ -5,7 +5,6 @@ using Convey.CQRS.Commands;
 using LibGit2Sharp;
 using Spirebyte.Services.Git.Application.Clients.Interfaces;
 using Spirebyte.Services.Git.Application.Exceptions;
-using Spirebyte.Services.Git.Application.Git.Services;
 using Spirebyte.Services.Git.Application.Git.Services.Interfaces;
 using Spirebyte.Services.Git.Application.Projects.Exceptions;
 using Spirebyte.Services.Git.Core.Constants;
@@ -17,11 +16,11 @@ namespace Spirebyte.Services.Git.Application.Git.Commands.Handlers;
 
 public class GetInfoRefsHandler : ICommandHandler<GetInfoRefs>
 {
+    private readonly IAppContext _appContext;
     private readonly IProjectRepository _projectRepository;
+    private readonly IProjectsApiHttpClient _projectsApiHttpClient;
     private readonly IRepositoryRepository _repositoryRepository;
     private readonly IRepositoryService _repositoryService;
-    private readonly IProjectsApiHttpClient _projectsApiHttpClient;
-    private readonly IAppContext _appContext;
 
     public GetInfoRefsHandler(IProjectRepository projectRepository, IRepositoryRepository repositoryRepository,
         IRepositoryService repositoryService, IProjectsApiHttpClient projectsApiHttpClient, IAppContext appContext)
@@ -32,7 +31,7 @@ public class GetInfoRefsHandler : ICommandHandler<GetInfoRefs>
         _projectsApiHttpClient = projectsApiHttpClient;
         _appContext = appContext;
     }
-    
+
     public async Task HandleAsync(GetInfoRefs command, CancellationToken cancellationToken = default)
     {
         var project = await _projectRepository.GetAsync(command.ProjectId);
@@ -40,7 +39,7 @@ public class GetInfoRefsHandler : ICommandHandler<GetInfoRefs>
 
         if (!await _projectsApiHttpClient.HasPermission(RepositoryPermissionKeys.Commit, _appContext.Identity.Id,
                 command.ProjectId)) throw new ActionNotAllowedException();
-        
+
         var repository = await _repositoryRepository.GetAsync(command.RepositoryId);
         if (repository is null) throw new RepositoryNotFoundException(command.RepositoryId);
 

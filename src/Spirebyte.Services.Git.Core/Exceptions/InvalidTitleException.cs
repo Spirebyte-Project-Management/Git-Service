@@ -10,9 +10,11 @@ public class InvalidTitleException : DomainException
     public InvalidTitleException(string title) : base($"Invalid title: {title}.")
     {
     }
-    protected InvalidTitleException(SerializationInfo info, StreamingContext context) 
+
+    protected InvalidTitleException(SerializationInfo info, StreamingContext context)
         : base(info, context)
     {
     }
+
     public override string Code { get; } = "invalid_title";
 }

@@ -11,10 +11,12 @@ public class InvalidProjectIdException : DomainException
     {
         ProjectId = projectId;
     }
-    protected InvalidProjectIdException(SerializationInfo info, StreamingContext context) 
+
+    protected InvalidProjectIdException(SerializationInfo info, StreamingContext context)
         : base(info, context)
     {
     }
+
     public string ProjectId { get; }
     public override string Code { get; } = "invalid_project_id";
 }

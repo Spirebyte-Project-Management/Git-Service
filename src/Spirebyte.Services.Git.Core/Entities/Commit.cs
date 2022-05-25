@@ -4,7 +4,8 @@ namespace Spirebyte.Services.Git.Core.Entities;
 
 public class Commit
 {
-    public Commit(string id, string sha, string shortMessage, string message, string authorUsername, string committerUsername, DateTime createdAt)
+    public Commit(string id, string sha, string shortMessage, string message, string authorUsername,
+        string committerUsername, DateTime createdAt)
     {
         Id = id;
         Sha = sha;
@@ -14,7 +15,7 @@ public class Commit
         CommitterUsername = committerUsername;
         CreatedAt = createdAt;
     }
-    
+
     public Commit(LibGit2Sharp.Commit commit)
     {
         Id = commit.Id.ToString(7);
@@ -25,6 +26,7 @@ public class Commit
         CommitterUsername = commit.Committer.Name;
         CreatedAt = commit.Author.When.DateTime;
     }
+
     public string Id { get; set; }
     public string Sha { get; set; }
     public string ShortMessage { get; set; }

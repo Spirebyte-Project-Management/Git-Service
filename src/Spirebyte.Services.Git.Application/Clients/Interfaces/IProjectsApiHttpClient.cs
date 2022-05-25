@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Threading.Tasks;
-using Convey.HTTP;
 
 namespace Spirebyte.Services.Git.Application.Clients.Interfaces;
 

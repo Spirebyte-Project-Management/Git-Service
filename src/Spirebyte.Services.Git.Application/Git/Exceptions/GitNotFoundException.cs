@@ -11,8 +11,8 @@ public class GitNotFoundException : AppException
     {
         Key = key;
     }
-    
-    protected GitNotFoundException(SerializationInfo info, StreamingContext context) 
+
+    protected GitNotFoundException(SerializationInfo info, StreamingContext context)
         : base(info, context)
     {
     }

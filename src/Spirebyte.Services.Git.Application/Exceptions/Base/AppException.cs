@@ -10,10 +10,10 @@ public abstract class AppException : Exception
     {
     }
 
-    protected AppException(SerializationInfo info, StreamingContext context) 
+    protected AppException(SerializationInfo info, StreamingContext context)
         : base(info, context)
     {
     }
-    
+
     public virtual string Code { get; }
 }

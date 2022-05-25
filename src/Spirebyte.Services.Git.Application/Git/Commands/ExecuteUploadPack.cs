@@ -1,5 +1,4 @@
 ﻿using System.IO;
-using Convey.CQRS.Commands;
 using Spirebyte.Services.Git.Application.Interfaces;
 
 namespace Spirebyte.Services.Git.Application.Git.Commands;
