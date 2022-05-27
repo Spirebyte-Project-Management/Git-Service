@@ -15,7 +15,7 @@
         <PackageReference Include="LibGit2Sharp" Version="0.27.0-preview-0175" />
         <PackageReference Include="Microsoft.Extensions.Logging" Version="6.0.0" />
         <PackageReference Include="Partytitan.Convey.Minio" Version="1.0.12" />
-        <PackageReference Include="Spirebyte.Shared" Version="1.0.15" />
+        <PackageReference Include="Spirebyte.Shared" Version="1.0.16" />
     </ItemGroup>
 
     <ItemGroup>
