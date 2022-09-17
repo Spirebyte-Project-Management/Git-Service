@@ -1,4 +1,4 @@
-﻿using Spirebyte.Services.Git.Application.Exceptions.Base;
+﻿using Spirebyte.Framework.Shared.Exceptions;
 
 namespace Spirebyte.Services.Git.Application.Projects.Exceptions;
 
@@ -8,7 +8,5 @@ public class ProjectNotFoundException : AppException
     {
         ProjectId = projectId;
     }
-
-    public override string Code { get; } = "project_not_found";
     public string ProjectId { get; }
 }

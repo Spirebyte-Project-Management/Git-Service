@@ -2,7 +2,7 @@
 using System.IO;
 using System.Threading;
 using System.Threading.Tasks;
-using Partytitan.Convey.Minio.Services.Interfaces;
+using Spirebyte.Framework.FileStorage.S3.Services;
 using Spirebyte.Services.Git.Application.Git.Services.Interfaces;
 using Spirebyte.Services.Git.Core.Entities;
 using Spirebyte.Services.Git.Core.Helpers;
@@ -11,11 +11,11 @@ namespace Spirebyte.Services.Git.Application.Git.Services;
 
 public class RepositoryService : IRepositoryService
 {
-    private readonly IMinioService _minioService;
+    private readonly IS3Service _s3Service;
 
-    public RepositoryService(IMinioService minioService)
+    public RepositoryService(IS3Service s3Service)
     {
-        _minioService = minioService;
+        _s3Service = s3Service;
     }
 
     public async Task EnsureLatestRepositoryIsCached(Repository repository)
@@ -36,7 +36,7 @@ public class RepositoryService : IRepositoryService
 
             foreach (var dir in repoDir.EnumerateDirectories()) ForceDeleteDirectory(dir.FullName);
 
-            await _minioService.DownloadDirAsync(repoPath, RepoPathHelpers.GetUploadPathForRepo(repository));
+            await _s3Service.DownloadDirAsync(repoPath, RepoPathHelpers.GetUploadPathForRepo(repository));
 
             EnsureRequiredGitDirectoriesExist(repoPath);
         }
@@ -55,7 +55,7 @@ public class RepositoryService : IRepositoryService
         var newReferenceId = repository.ChangeReferenceId();
         RepoPathHelpers.UpdateRepoCacheReference(repository.Id, newReferenceId);
 
-        await _minioService.UploadDirAsync(repoPath, RepoPathHelpers.GetUploadPathForRepo(repository));
+        await _s3Service.UploadDirAsync(repoPath, RepoPathHelpers.GetUploadPathForRepo(repository));
 
         return repository;
     }

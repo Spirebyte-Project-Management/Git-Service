@@ -1,4 +1,4 @@
-﻿using Spirebyte.Services.Git.Application.Exceptions.Base;
+﻿using Spirebyte.Framework.Shared.Exceptions;
 
 namespace Spirebyte.Services.Git.Application.Projects.Exceptions;
 
@@ -9,7 +9,5 @@ public class ProjectAlreadyCreatedException : AppException
     {
         ProjectId = projectId;
     }
-
-    public override string Code { get; } = "project_already_created";
     public string ProjectId { get; }
 }

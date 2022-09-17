@@ -1,4 +1,4 @@
-﻿using Convey.Types;
+﻿using Spirebyte.Framework.Shared.Types;
 
 namespace Spirebyte.Services.Git.Infrastructure.Mongo.Documents;
 

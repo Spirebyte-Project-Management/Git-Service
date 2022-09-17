@@ -1,15 +1,11 @@
 using System.Threading.Tasks;
-using Convey;
-using Convey.Logging;
-using Convey.Secrets.Vault;
-using Convey.Types;
-using Convey.WebApi;
 using Microsoft.AspNetCore;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.DependencyInjection;
+using Spirebyte.Framework;
 using Spirebyte.Services.Git.Application;
 using Spirebyte.Services.Git.Core.Constants;
 using Spirebyte.Services.Git.Infrastructure;
@@ -27,13 +23,13 @@ public class Program
             .RunAsync();
     }
 
-    public static IWebHostBuilder CreateWebHostBuilder(string[] args)
+    private static IWebHostBuilder CreateWebHostBuilder(string[] args)
     {
         return WebHost.CreateDefaultBuilder(args)
-            .ConfigureServices(services =>
-            {
-                services.AddControllers().AddMetrics();
-                services.AddAuthorization(options =>
+            .ConfigureServices((ctx, services) => services
+                .AddApplication()
+                .AddInfrastructure(ctx.Configuration)
+                .Configure<AuthorizationOptions>(options =>
                 {
                     options.AddEitherOrScopePolicy(ApiScopes.Read, "repositories.read", "repositories.manage");
                     options.AddEitherOrScopePolicy(ApiScopes.Write, "repositories.write", "repositories.manage");
@@ -44,27 +40,21 @@ public class Program
                         policy.AuthenticationSchemes.Add("basic-introspection");
                         policy.RequireAuthenticatedUser();
                     });
-                });
-                services
-                    .AddConvey()
-                    .AddWebApi()
-                    .AddApplication()
-                    .AddInfrastructure()
-                    .Build();
-            })
+                })
+                .AddControllers()
+            )
             .Configure(app => app
+                .UseSpirebyteFramework()
+                .UseApplication()
                 .UseInfrastructure()
-                .UseRouting()
-                .UseAuthorization()
-                .UsePingEndpoint()
                 .UseEndpoints(endpoints =>
                     {
                         endpoints.MapGet("",
-                            ctx => ctx.Response.WriteAsync(ctx.RequestServices.GetService<AppOptions>()?.Name!));
+                            ctx => ctx.Response.WriteAsync(ctx.RequestServices.GetService<AppInfo>().Name));
+                        endpoints.MapGet("/ping", () => "pong");
                         endpoints.MapControllers();
                     }
                 ))
-            .UseLogging()
-            .UseVault();
+            .AddSpirebyteFramework();
     }
 }

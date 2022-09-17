@@ -1,6 +1,4 @@
-﻿using Convey;
-using Convey.CQRS.Commands;
-using Convey.CQRS.Events;
+﻿using Microsoft.AspNetCore.Builder;
 using Microsoft.Extensions.DependencyInjection;
 using Spirebyte.Services.Git.Application.Git.Services;
 using Spirebyte.Services.Git.Application.Git.Services.Interfaces;
@@ -9,14 +7,14 @@ namespace Spirebyte.Services.Git.Application;
 
 public static class Extensions
 {
-    public static IConveyBuilder AddApplication(this IConveyBuilder builder)
+    public static IServiceCollection AddApplication(this IServiceCollection services)
     {
-        builder.Services.AddSingleton<IRepositoryService, RepositoryService>();
+        services.AddSingleton<IRepositoryService, RepositoryService>();
+        return services;
+    }
 
-        return builder
-            .AddCommandHandlers()
-            .AddEventHandlers()
-            .AddInMemoryCommandDispatcher()
-            .AddInMemoryEventDispatcher();
+    public static IApplicationBuilder UseApplication(this IApplicationBuilder app)
+    {
+        return app;
     }
 }

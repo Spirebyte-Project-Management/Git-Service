@@ -1,8 +1,9 @@
 ﻿using System.Threading;
 using System.Threading.Tasks;
 using CliWrap;
-using Convey.CQRS.Commands;
 using LibGit2Sharp;
+using Spirebyte.Framework.Contexts;
+using Spirebyte.Framework.Shared.Handlers;
 using Spirebyte.Services.Git.Application.Clients.Interfaces;
 using Spirebyte.Services.Git.Application.Exceptions;
 using Spirebyte.Services.Git.Application.Git.Services.Interfaces;
@@ -10,26 +11,25 @@ using Spirebyte.Services.Git.Application.Projects.Exceptions;
 using Spirebyte.Services.Git.Core.Constants;
 using Spirebyte.Services.Git.Core.Helpers;
 using Spirebyte.Services.Git.Core.Repositories;
-using Spirebyte.Shared.Contexts.Interfaces;
 
 namespace Spirebyte.Services.Git.Application.Git.Commands.Handlers;
 
 public class ExecuteReceivePackHandler : ICommandHandler<ExecuteReceivePack>
 {
-    private readonly IAppContext _appContext;
+    private readonly IContextAccessor _contextAccessor;
     private readonly IProjectRepository _projectRepository;
     private readonly IProjectsApiHttpClient _projectsApiHttpClient;
     private readonly IRepositoryRepository _repositoryRepository;
     private readonly IRepositoryService _repositoryService;
 
     public ExecuteReceivePackHandler(IProjectRepository projectRepository, IRepositoryRepository repositoryRepository,
-        IRepositoryService repositoryService, IProjectsApiHttpClient projectsApiHttpClient, IAppContext appContext)
+        IRepositoryService repositoryService, IProjectsApiHttpClient projectsApiHttpClient, IContextAccessor contextAccessor)
     {
         _projectRepository = projectRepository;
         _repositoryRepository = repositoryRepository;
         _repositoryService = repositoryService;
         _projectsApiHttpClient = projectsApiHttpClient;
-        _appContext = appContext;
+        _contextAccessor = contextAccessor;
     }
 
     public async Task HandleAsync(ExecuteReceivePack command, CancellationToken cancellationToken = default)
@@ -37,7 +37,7 @@ public class ExecuteReceivePackHandler : ICommandHandler<ExecuteReceivePack>
         var project = await _projectRepository.GetAsync(command.ProjectId);
         if (project is null) throw new ProjectNotFoundException(command.ProjectId);
 
-        if (!await _projectsApiHttpClient.HasPermission(RepositoryPermissionKeys.Commit, _appContext.Identity.Id,
+        if (!await _projectsApiHttpClient.HasPermission(RepositoryPermissionKeys.Commit, _contextAccessor.Context.GetUserId(),
                 command.ProjectId)) throw new ActionNotAllowedException();
 
         var repository = await _repositoryRepository.GetAsync(command.RepositoryId);

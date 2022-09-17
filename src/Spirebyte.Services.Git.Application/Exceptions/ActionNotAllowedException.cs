@@ -1,4 +1,4 @@
-﻿using Spirebyte.Services.Git.Application.Exceptions.Base;
+﻿using Minio.Exceptions;
 
 namespace Spirebyte.Services.Git.Application.Exceptions;
 
@@ -9,5 +9,5 @@ public class ActionNotAllowedException : AuthorizationException
     {
     }
 
-    public override string Code { get; } = "action_not_allowed";
+    public string Code { get; } = "action_not_allowed";
 }

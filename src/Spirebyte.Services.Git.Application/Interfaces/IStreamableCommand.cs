@@ -1,5 +1,5 @@
 ﻿using System.IO;
-using Convey.CQRS.Commands;
+using Spirebyte.Framework.Shared.Abstractions;
 
 namespace Spirebyte.Services.Git.Application.Interfaces;
 
