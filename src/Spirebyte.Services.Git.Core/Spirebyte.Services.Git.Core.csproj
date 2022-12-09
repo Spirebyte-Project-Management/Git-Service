@@ -2,10 +2,11 @@
 
     <PropertyGroup>
         <TargetFramework>net6.0</TargetFramework>
+        <Nullable>enable</Nullable>
     </PropertyGroup>
 
     <ItemGroup>
-        <PackageReference Include="Spirebyte.Framework" Version="1.1.6" />
+        <PackageReference Include="Spirebyte.Framework" Version="1.1.24" />
         <PackageReference Include="LibGit2Sharp" Version="0.27.0-preview-0175" />
     </ItemGroup>
 

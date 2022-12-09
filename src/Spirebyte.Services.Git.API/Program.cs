@@ -6,11 +6,11 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.DependencyInjection;
 using Spirebyte.Framework;
+using Spirebyte.Framework.Auth;
 using Spirebyte.Services.Git.Application;
 using Spirebyte.Services.Git.Core.Constants;
 using Spirebyte.Services.Git.Infrastructure;
 using Spirebyte.Services.Git.Infrastructure.Authentication;
-using Spirebyte.Shared.IdentityServer;
 
 namespace Spirebyte.Services.Git.API;
 
@@ -31,15 +31,10 @@ public class Program
                 .AddInfrastructure(ctx.Configuration)
                 .Configure<AuthorizationOptions>(options =>
                 {
-                    options.AddEitherOrScopePolicy(ApiScopes.Read, "repositories.read", "repositories.manage");
-                    options.AddEitherOrScopePolicy(ApiScopes.Write, "repositories.write", "repositories.manage");
-                    options.AddEitherOrScopePolicy(ApiScopes.Delete, "repositories.delete", "repositories.manage");
-                    options.AddEitherOrScopePolicy(ApiScopes.Commit, "repositories.commit", "repositories.manage");
-                    options.AddPolicy(nameof(GitAuthorizeAttribute), policy =>
-                    {
-                        policy.AuthenticationSchemes.Add("basic-introspection");
-                        policy.RequireAuthenticatedUser();
-                    });
+                    options.AddEitherOrScopePolicy(ApiScopes.RepositoriesRead, ApiScopes.RepositoriesRead, ApiScopes.RepositoriesManage);
+                    options.AddEitherOrScopePolicy(ApiScopes.RepositoriesWrite, ApiScopes.RepositoriesWrite, ApiScopes.RepositoriesManage);
+                    options.AddEitherOrScopePolicy(ApiScopes.RepositoriesDelete, ApiScopes.RepositoriesDelete, ApiScopes.RepositoriesManage);
+                    options.AddEitherOrScopePolicy(ApiScopes.RepositoriesCommit, ApiScopes.RepositoriesCommit, ApiScopes.RepositoriesManage);
                 })
                 .AddControllers()
             )

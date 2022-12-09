@@ -3,9 +3,7 @@
     <PropertyGroup>
         <TargetFramework>net6.0</TargetFramework>
         <UserSecretsId>eac4a875-6c45-4a5b-8cfe-80c130754c2c</UserSecretsId>
-        <DockerDefaultTargetOS>Linux</DockerDefaultTargetOS>
-        <DockerfileContext>..\..\..\..</DockerfileContext>
-        <DockerComposeProjectPath>..\..\..\..\docker-compose.dcproj</DockerComposeProjectPath>
+        <Nullable>enable</Nullable>
     </PropertyGroup>
 
     <ItemGroup>
@@ -25,10 +23,6 @@
 
     <ItemGroup>
         <Folder Include="RepoCache" />
-    </ItemGroup>
-
-    <ItemGroup>
-        <Content Include="Certs\**" CopyToPublishDirectory="Always" />
     </ItemGroup>
 
 </Project>

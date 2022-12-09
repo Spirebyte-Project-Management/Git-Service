@@ -14,6 +14,8 @@ on:
   workflow_dispatch:
 
 env:
+  Nuget_CustomFeedUserName: ${{ github.actor }}
+  Nuget_CustomFeedPassword: ${{ secrets.NUGET_CUSTOMFEEDPASSWORD }}
   REGISTRY: ghcr.io
   IMAGE_NAME: ${{ github.repository }}
   DOTNET_VERSION: '6.0.x'
@@ -46,7 +48,9 @@ jobs:
         dotnet sonarscanner begin /k:"Spirebyte-Project-Management_Git-Service" /o:"spirebyte-project-management" /d:sonar.login="${{ secrets.SONAR_TOKEN }}" /d:sonar.host.url="https://sonarcloud.io" /d:sonar.cs.vstest.reportsPaths=$(Agent.TempDirectory)\**\*.trx /d:sonar.cs.opencover.reportsPaths="$(Agent.TempDirectory)\**\opencover.xml"
 
     - name: Install dependencies
-      run: dotnet restore
+      run: |
+        dotnet nuget add source --username ${{ env.Nuget_CustomFeedUserName }} --password ${{ env.Nuget_CustomFeedPassword }} --store-password-in-clear-text --name github "https://nuget.pkg.github.com/Spirebyte-Project-Management/index.json" 
+        dotnet restore
       
     - name: Build
       run: dotnet build --configuration Release --no-restore
@@ -90,9 +94,13 @@ jobs:
         uses: docker/build-push-action@ad44023a93711e3deb337508980b4b5e9bcdc5dc
         with:
           context: .
+          file: ./src/Spirebyte.Services.Git.API/Dockerfile
           push: true
           tags: ${{ steps.meta.outputs.tags }}
           labels: ${{ steps.meta.outputs.labels }}
+          build-args: |
+            Nuget_CustomFeedUserName=${{ env.Nuget_CustomFeedUserName }}
+            Nuget_CustomFeedPassword=${{ env.Nuget_CustomFeedPassword }}
 
       - name: Deploy to environment
         uses: joelwmale/webhook-action@2.1.0
