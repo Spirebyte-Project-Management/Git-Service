@@ -9,7 +9,7 @@
         <PackageReference Include="CliWrap" Version="3.4.1" />
         <PackageReference Include="LibGit2Sharp" Version="0.27.0-preview-0175" />
         <PackageReference Include="Spirebyte.Shared" Version="1.0.22" />
-        <PackageReference Include="Spirebyte.Framework" Version="1.1.24" />
+        <PackageReference Include="Spirebyte.Framework" Version="1.1.26" />
     </ItemGroup>
 
     <ItemGroup>
