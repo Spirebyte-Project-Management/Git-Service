@@ -18,7 +18,7 @@ env:
   Nuget_CustomFeedPassword: ${{ secrets.NUGET_CUSTOMFEEDPASSWORD }}
   REGISTRY: ghcr.io
   IMAGE_NAME: ${{ github.repository }}
-  DOTNET_VERSION: '6.0.x'
+  DOTNET_VERSION: '7.0.x'
 
 # A workflow run is made up of one or more jobs that can run sequentially or in parallel
 jobs:

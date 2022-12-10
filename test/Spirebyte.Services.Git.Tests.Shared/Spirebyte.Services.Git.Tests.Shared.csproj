@@ -1,16 +1,16 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
     <PropertyGroup>
-        <TargetFramework>net6.0</TargetFramework>
+        <TargetFramework>net7.0</TargetFramework>
         <Nullable>enable</Nullable>
     </PropertyGroup>
 
     <ItemGroup>
-        <PackageReference Include="Bogus" Version="34.0.1" />
-        <PackageReference Include="Convey.MessageBrokers.RabbitMQ" Version="1.0.531" />
-        <PackageReference Include="Microsoft.AspNetCore.Mvc.Testing" Version="6.0.1" />
-        <PackageReference Include="Microsoft.EntityFrameworkCore" Version="6.0.1" />
-        <PackageReference Include="xunit.extensibility.core" Version="2.4.2-pre.12" />
+        <PackageReference Include="Bogus" Version="34.0.2" />
+        <PackageReference Include="Convey.MessageBrokers.RabbitMQ" Version="1.0.541" />
+        <PackageReference Include="Microsoft.AspNetCore.Mvc.Testing" Version="7.0.0" />
+        <PackageReference Include="Microsoft.EntityFrameworkCore" Version="7.0.0" />
+        <PackageReference Include="xunit.extensibility.core" Version="2.4.2" />
     </ItemGroup>
 
     <ItemGroup>
