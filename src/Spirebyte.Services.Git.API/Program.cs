@@ -10,7 +10,6 @@ using Spirebyte.Framework.Auth;
 using Spirebyte.Services.Git.Application;
 using Spirebyte.Services.Git.Core.Constants;
 using Spirebyte.Services.Git.Infrastructure;
-using Spirebyte.Services.Git.Infrastructure.Authentication;
 
 namespace Spirebyte.Services.Git.API;
 

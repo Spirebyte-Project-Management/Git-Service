@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Runtime.Serialization;
 using Spirebyte.Framework.Shared.Exceptions;
 
 namespace Spirebyte.Services.Git.Core.Exceptions;
